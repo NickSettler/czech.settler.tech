@@ -95,12 +95,10 @@ export default {
             }
         },
         logout() {
-            Api.getInstance().auth.refresh()
+            Api.getInstance().auth.logout()
                 .then(() => {
-                    return Api.getInstance().auth.logout()
-                }).then(() => {
-                this.shown = false;
-            })
+                    this.shown = false;
+                })
         }
     }
 }
