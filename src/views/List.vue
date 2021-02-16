@@ -15,8 +15,8 @@
         <div v-if="displayStyle==='list'">
             <EditDialog :word-id="word.id" :visible="word.id === editingId" v-for="(word, i) in words" :key="word.id"
                         :handle-cancel="cancelEdit">
-                <v-card elevation="2" :class="`${i + 1 !== words.length ? 'mb-4' : ''}`" hover
-                        @click="editingId = word.id">
+                <v-card elevation="2" :class="`${i + 1 !== words.length ? 'mb-4' : ''}`" :hover="logged"
+                        @click="logged ? (editingId = word.id) : false">
                     <v-card-text>
                         <p class="text-h6">
                             {{ word.czech }} - {{ word.russian }}
@@ -63,7 +63,11 @@ export default {
         searchQuery: "",
         displayStyle: 'list',
         editingId: -1,
+        logged: Api.getInstance().auth.token !== null,
     }),
+    updated() {
+        this.logged = Api.getInstance().auth.token !== null;
+    },
     methods: {
         async reloadWords() {
             const listId = this.$router.currentRoute.params.id
