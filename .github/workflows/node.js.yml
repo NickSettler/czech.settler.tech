@@ -38,5 +38,5 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           password: ${{ secrets.REMOTE_PASSWORD }}
-          source: "build/*"
+          source: "dist/*"
           target: ${{ secrets.REMOTE_TARGET }}
