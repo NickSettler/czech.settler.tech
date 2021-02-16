@@ -1,18 +1,24 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-  </div>
+    <div>
+        <v-card>
+            <v-card-text>
+                <p class="text-h6 black--text">Total lists count</p>
+                <p class="text-body-1">{{ lists.length }}</p>
+            </v-card-text>
+        </v-card>
+    </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
+<script>
+import Api from "@/classes/api.ts";
 
-@Component({
-  components: {
-    HelloWorld
-  }
-})
-export default class Home extends Vue {}
+export default {
+    name: 'Home',
+    async mounted() {
+        this.lists = (await Api.getInstance().items('lists').read()).data;
+    },
+    data: () => ({
+        lists: []
+    })
+}
 </script>
