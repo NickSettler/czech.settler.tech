@@ -1,57 +1,86 @@
 <template>
-  <v-app>
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+    <v-app id="inspire">
+        <v-app-bar
+            app
+            color="white"
+            flat
+            extended
+        >
+            <v-container class="py-0 fill-height">
+                <v-avatar
+                    class="mr-10"
+                    color="grey darken-1"
+                    size="32"
+                ></v-avatar>
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
+                <v-spacer></v-spacer>
 
-      <v-spacer></v-spacer>
+                <v-responsive max-width="260" class="mr-6" v-if="!$vuetify.breakpoint.xs">
+                    <v-text-field
+                        dense
+                        flat
+                        hide-details
+                        rounded
+                        solo-inverted
+                    ></v-text-field>
+                </v-responsive>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
+                <LoginDialog/>
 
-    <v-main>
-      <HelloWorld />
-    </v-main>
-  </v-app>
+                <v-btn icon>
+                    <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+            </v-container>
+        </v-app-bar>
+
+        <v-main class="grey lighten-3">
+            <v-container>
+                <v-row>
+                    <v-col :cols="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm ? 12 : 2">
+                        <v-sheet rounded="lg">
+                            <v-list color="transparent" dense>
+                                <v-list-item link to="/">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            Main
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                                <v-list-item link to="/lists">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            Lists
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+
+                                <v-divider class="my-2"></v-divider>
+
+                                <v-list-item to="/help" link>
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            Help
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-list>
+                        </v-sheet>
+                    </v-col>
+
+                    <v-col>
+                        <v-sheet class="pa-4" min-height="70vh" rounded="lg">
+                            <router-view/>
+                        </v-sheet>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </v-main>
+    </v-app>
 </template>
+<script>
+import LoginDialog from "@/components/LoginDialog";
 
-<script lang="ts">
-import Vue from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
-
-export default Vue.extend({
-  name: "App",
-
-  components: {
-    HelloWorld
-  },
-
-  data: () => ({
-    //
-  })
-});
+export default {
+    components: {LoginDialog}
+}
 </script>
