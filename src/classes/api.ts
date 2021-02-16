@@ -1,18 +1,27 @@
 import DirectusSDK from "@directus/sdk-js";
+import localforage from 'localforage';
+import {AuthOptions} from "@directus/sdk-js/dist/types/handlers";
 
 export default class Api extends DirectusSDK {
   private static API_URL = "https://cms.settler.tech/";
   private static instance: Api;
 
-  private constructor(url: string) {
-      super(url);
-  }
+    private constructor(url: string, options?: {
+        auth: Partial<AuthOptions>;
+    }) {
+        super(url, options);
+    }
 
-  public static getInstance(): DirectusSDK {
-      if (!Api.instance) {
-          Api.instance = new Api(Api.API_URL);
-      }
+    public static getInstance(): Api {
+        if (!Api.instance) {
+            Api.instance = new Api(Api.API_URL, {
+                auth: {
+                    storage: localforage,
+                    mode: 'json'
+                }
+            });
+        }
 
-      return Api.instance;
-  }
+        return Api.instance;
+    }
 }
