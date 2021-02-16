@@ -81,6 +81,6 @@
 import LoginDialog from "@/components/LoginDialog";
 
 export default {
-    components: {LoginDialog}
+    components: {LoginDialog},
 }
 </script>
