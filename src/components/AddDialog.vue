@@ -50,7 +50,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Api from "@/classes/api.ts";
 
 export default {
