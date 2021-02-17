@@ -9,6 +9,11 @@
                    :color="displayStyle ==='hidden' ? 'primary' : 'accent'" @click="selectStyle('hidden')">
                 Hidden
             </v-btn>
+            <v-btn icon color="accent" v-if="displayStyle === 'hidden'" @click="toggleTranslation">
+                <v-icon>
+                    mdi-google-translate
+                </v-icon>
+            </v-btn>
             <v-spacer></v-spacer>
             <AddDialog :list-id="this.$router.currentRoute.params.id" :reload-words="reloadWords"/>
         </div>
@@ -29,8 +34,11 @@
             <v-card elevation="2" v-for="(word, i) in words" :key="word.id"
                     :class="`${i + 1 !== words.length ? 'mb-4' : ''}`" hover @click="unhideWord(word.id)">
                 <v-card-text>
-                    <p class="text-h6">
+                    <p class="text-h6" v-if="displayTranslation === 'czech'">
                         {{ word.hidden ? word.czech : word.russian }}
+                    </p>
+                    <p class="text-h6" v-if="displayTranslation === 'russian'">
+                        {{ word.hidden ? word.russian : word.czech }}
                     </p>
                 </v-card-text>
             </v-card>
@@ -52,16 +60,24 @@ export default {
         if (localStorage.getItem(`list-${this.$router.currentRoute.params.id}-style`) === null) {
             localStorage.setItem(`list-${this.$router.currentRoute.params.id}-style`, 'list');
         }
+
+        if (localStorage.getItem(`list-${this.$router.currentRoute.params.id}-translation`) === null) {
+            localStorage.setItem(`list-${this.$router.currentRoute.params.id}-translation`, 'czech');
+        }
     },
     beforeMount() {
         if (localStorage.getItem(`list-${this.$router.currentRoute.params.id}-style`) !== null) {
             this.displayStyle = localStorage.getItem(`list-${this.$router.currentRoute.params.id}-style`)
+        }
+        if (localStorage.getItem(`list-${this.$router.currentRoute.params.id}-translation`) !== null) {
+            this.displayTranslation = localStorage.getItem(`list-${this.$router.currentRoute.params.id}-translation`)
         }
     },
     data: () => ({
         words: [],
         searchQuery: "",
         displayStyle: 'list',
+        displayTranslation: 'czech',
         editingId: -1,
         logged: Api.getInstance().auth.token !== null,
     }),
@@ -106,6 +122,14 @@ export default {
         selectStyle(style) {
             this.displayStyle = style;
             localStorage.setItem(`list-${this.$router.currentRoute.params.id}-style`, style);
+        },
+        toggleTranslation() {
+            this.words = this.words.map(word => {
+                word.hidden = true;
+                return word;
+            });
+            localStorage.setItem(`list-${this.$router.currentRoute.params.id}-translation`, this.displayTranslation === 'czech' ? 'russian' : 'czech');
+            this.displayTranslation = this.displayTranslation === 'czech' ? 'russian' : 'czech';
         },
         unhideWord(id) {
             this.words.find(word => word.id === id).hidden = !this.words.find(word => word.id === id).hidden;
