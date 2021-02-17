@@ -10,4 +10,8 @@ declare global {
       [elem: string]: any;
     }
   }
+  interface Window {
+    PasswordCredential: PasswordCredential;
+    FederatedCredential: FederatedCredential;
+  }
 }

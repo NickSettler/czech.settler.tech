@@ -43,22 +43,27 @@
     </div>
 </template>
 
-<script lang="js">
+<script lang="ts">
 import Api from "@/classes/api.ts";
+import Vue from 'vue';
+import {VForm} from "@/classes/types/vuetify";
+import {LoginCredentials} from "@directus/sdk-js/dist/types/handlers";
+import localforage from "localforage";
 
-export default {
+export default Vue.extend({
     name: "LoginDialog",
     data: () => ({
         shown: false,
         email: '',
         password: '',
         emailRules: [
-            value => !!value || "Required",
-            value => /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(value) || "Email not valid"
+            (value: any) => !!value || "Required",
+            (value: string) => /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(value) || "Email not valid"
         ],
         passwordRules: [
-            value => !!value || "Required"
+            (value: any) => !!value || "Required"
         ],
+        token: '',
         error: false,
         logged: Api.getInstance().auth.token !== null,
         userData: {},
@@ -69,21 +74,29 @@ export default {
             Api.getInstance().users.me.read().then(data => this.userData = data.data);
     },
     methods: {
-        login(e) {
+        login(e: Event) {
             e.preventDefault();
 
-            if (this.$refs.loginForm.validate()) {
-                Api.getInstance().auth.login({
+            if ((this.$refs.loginForm as VForm).validate()) {
+                const credentials: LoginCredentials = {
                     email: this.email,
                     password: this.password
-                })
+                }
+
+                if (this.token)
+                    credentials.otp = this.token
+
+                Api.getInstance().auth.login(credentials)
                     .then(async () => {
                         if (window.PasswordCredential) {
                             const c = await navigator.credentials.create({
-                                password: e.target
-                            })
+                                password: e.target as HTMLFormElement
+                            });
+
                             this.shown = false;
-                            return navigator.credentials.store(c);
+
+                            return navigator.credentials.store(c!);
+
                         } else {
                             this.shown = false;
                             return Promise.resolve();
@@ -101,7 +114,7 @@ export default {
                 })
         }
     }
-}
+});
 </script>
 
 <style scoped>
