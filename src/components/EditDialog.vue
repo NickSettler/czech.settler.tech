@@ -13,6 +13,7 @@
                         <v-text-field :rules="wordRules" v-model="czech" placeholder="Czech" @input="error = false"/>
                         <v-text-field :rules="wordRules" v-model="russian" placeholder="Russian"
                                       @input="error = false"/>
+                        <v-textarea v-model="description" placeholder="Description"></v-textarea>
                         <p v-if="error" class="red--text darken-3">Error. Try again</p>
                     </v-card-text>
                     <v-card-actions>
@@ -54,6 +55,7 @@ export default {
         word: {},
         czech: '',
         russian: '',
+        description: ``,
         wordRules: [
             value => !!value || "Required"
         ],
@@ -71,6 +73,7 @@ export default {
             .then(data => {
                 this.loading = false;
                 this.word = data.data;
+                this.description = data.data.description;
                 this.czech = data.data.czech;
                 this.russian = data.data.russian;
             });
@@ -86,20 +89,23 @@ export default {
             Api.getInstance().items('words').delete(this.$props.wordId)
                 .then(() => {
                     this.shown = false;
-                    this.$props.handleCancel();
+                    this.cancelDialog();
                 })
         },
         updateWord() {
             Api.getInstance().items('words').update(this.$props.wordId, {
                 czech: this.czech,
                 russian: this.russian,
+                description: this.description,
             }).then(() => {
-                this.shown = false;
-                this.handleCancel();
+                this.cancelDialog();
             })
         },
         cancelDialog() {
             this.shown = false;
+            this.czech = '';
+            this.russian = '';
+            this.description = '';
             this.handleCancel();
         }
     }

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-dialog v-model="shown" max-width="290">
+        <v-dialog v-model="shown" max-width="290" @click:outside="cancel">
             <template v-slot:activator="{ on, attrs }">
                 <v-btn color="accent" dark v-bind="attrs" v-on="on">
                     Add word
@@ -13,21 +13,24 @@
                     </v-card-title>
                     <v-card-text>
                         <v-text-field
+                            validate-on-blur="false"
                             :rules="wordRules"
                             v-model="czech"
                             placeholder="Czech"
                             @input="error = false"
                         />
                         <v-text-field
+                            validate-on-blur="false"
                             :rules="wordRules"
                             v-model="russian"
                             placeholder="Russian"
                             @input="error = false"
                         />
+                        <v-textarea v-model="description" placeholder="Description"></v-textarea>
                         <p v-if="error" class="red--text darken-3">Error. Try again</p>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn color="green darken-1" text @click="shown = false">
+                        <v-btn color="green darken-1" text @click="cancel">
                             Close
                         </v-btn>
                         <v-btn color="green darken-1" text @click="addWord">
@@ -41,7 +44,7 @@
                     You must login
                 </v-card-title>
                 <v-card-actions>
-                    <v-btn color="green darken-1" text @click="shown = false">
+                    <v-btn color="green darken-1" text @click="cancel">
                         OK
                     </v-btn>
                 </v-card-actions>
@@ -60,6 +63,7 @@ export default {
         shown: false,
         czech: "",
         russian: "",
+        description: "",
         wordRules: [value => !!value || "Required"],
         logged: Api.getInstance().auth.token !== null,
         error: false
@@ -73,6 +77,7 @@ export default {
                 Api.getInstance()
                     .items("words")
                     .create({
+                        description: this.description,
                         czech: this.czech,
                         russian: this.russian
                     })
@@ -85,13 +90,19 @@ export default {
                             });
                     })
                     .then(() => {
-                        this.shown = false;
-                        this.$props.reloadWords();
+                        this.cancel();
                     })
                     .catch(() => {
                         this.error = true;
                     });
             }
+        },
+        cancel(){
+            this.czech = "";
+            this.russian = "";
+            this.description = "";
+            this.shown = false;
+            this.reloadWords();
         }
     }
 };
