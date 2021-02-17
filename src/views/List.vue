@@ -26,6 +26,8 @@
                         <p class="text-h6">
                             {{ word.czech }} - {{ word.russian }}
                         </p>
+                        <p style="white-space: pre-wrap" class="body-2 mb-0" v-if="word.description"
+                           v-html="word.description"></p>
                     </v-card-text>
                 </v-card>
             </EditDialog>
