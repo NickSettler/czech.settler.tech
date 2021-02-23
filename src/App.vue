@@ -72,5 +72,33 @@ import Api from '@/classes/api';
 
 export default {
     components: { LoginDialog },
+    store: store,
+    mounted() {
+        store.dispatch('setLogged', Api.getInstance().auth.token !== null);
+
+        if (Api.getInstance().auth.token !== null && Object.keys(store.state.auth.userData).length !== 0) {
+            console.log('asd');
+            Api.getInstance()
+                .users.me.read()
+                .then((data) => store.dispatch('setUserData', data.data))
+                .then((d) => {
+                    console.log(d);
+                    Api.getInstance().roles.read({
+                        filter: {
+                            id: data.data.role,
+                        },
+                        single: true,
+                    });
+                })
+                .then((role) => {
+                    console.log(role);
+                    store.dispatch('setUserData', {
+                        ...store.state.auth.userData,
+                        admin_access: role.data.admin_access,
+                    });
+                })
+                .then(() => console.log(store.state.auth.userData));
+        }
+    },
 };
 </script>
