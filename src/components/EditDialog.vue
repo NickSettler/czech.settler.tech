@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-dialog v-model="shown" max-width="360" @click:outside="cancelDialog">
+        <v-dialog v-model="dialogShown" max-width="360" @click:outside="cancelDialog">
             <template v-slot:activator="{ on, attrs }">
                 <slot v-bind="attrs" v-on="on"></slot>
             </template>
@@ -55,20 +55,18 @@ export default {
         error: false,
         loading: true,
     }),
-    beforeMount() {
-        Api.getInstance().items('words').read({
-            filter: {
-                id: `${this.$props.wordId}`
-            },
-            single: true
-        })
-            .then(data => {
-                this.loading = false;
-                this.word = data.data;
-                this.description = data.data.description;
-                this.czech = data.data.czech;
-                this.russian = data.data.russian;
-            });
+    mounted() {
+        // this.getWordDetails();
+    },
+    computed: {
+        dialogShown() {
+            return this.shown && !this.loading;
+        }
+    },
+    watch: {
+        shown() {
+            this.getWordDetails();
+        }
     },
     updated() {
         this.logged = Api.getInstance().auth.token !== null;
@@ -77,6 +75,21 @@ export default {
             this.shown = true;
     },
     methods: {
+        getWordDetails() {
+            Api.getInstance().items('words').read({
+                filter: {
+                    id: `${this.$props.wordId}`
+                },
+                single: true
+            })
+                .then(data => {
+                    this.loading = false;
+                    this.word = data.data;
+                    this.description = data.data.description;
+                    this.czech = data.data.czech;
+                    this.russian = data.data.russian;
+                });
+        },
         deleteWord() {
             Api.getInstance().items('words').delete(this.$props.wordId)
                 .then(() => {
@@ -91,6 +104,8 @@ export default {
                 description: this.description,
             }).then(() => {
                 this.cancelDialog();
+            }).catch(error => {
+                console.log(JSON.parse(JSON.stringify(error)));
             })
         },
         cancelDialog() {
