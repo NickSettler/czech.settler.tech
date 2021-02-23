@@ -15,6 +15,21 @@ export default class Api extends DirectusSDK {
         super(url, options);
     }
 
+    items(collection: string): ItemsHandler {
+        super
+            .items(collection)
+            .read()
+            .catch(() => {
+                localforage.removeItem('directus_access_token');
+                localforage.removeItem('directus_access_token_expires');
+                localforage.removeItem('directus_refresh_token');
+
+                return super.items(collection).read();
+            });
+
+        return super.items(collection);
+    }
+
     public static getInstance(): Api {
         if (!Api.instance) {
             Api.instance = new Api(Api.API_URL, {
@@ -26,5 +41,9 @@ export default class Api extends DirectusSDK {
         }
 
         return Api.instance;
+    }
+
+    get logged(): boolean {
+        return this.auth.token !== null;
     }
 }
