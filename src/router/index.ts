@@ -19,6 +19,11 @@ const routes: Array<RouteConfig> = [
         name: 'List :id',
         component: () => import(/* webpackChunkName: "list" */ '../views/List.vue'),
     },
+    {
+        path: '/notes',
+        name: 'Notes',
+        component: () => import(/* webpackChunkName: "list" */ '../views/Notes.vue'),
+    },
 ];
 
 const router = new VueRouter({
