@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Api from "@/classes/api.ts";
+import Api from '@/classes/api.ts';
 
 export default {
     name: 'Home',
@@ -18,7 +18,7 @@ export default {
         this.lists = (await Api.getInstance().items('lists').read()).data;
     },
     data: () => ({
-        lists: []
-    })
-}
+        lists: [],
+    }),
+};
 </script>

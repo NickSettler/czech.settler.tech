@@ -1,1 +1,1 @@
-export type VForm = Vue & { validate: () => boolean }
+export type VForm = Vue & { validate: () => boolean };

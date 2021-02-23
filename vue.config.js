@@ -1,7 +1,7 @@
 module.exports = {
-  transpileDependencies: ["vuetify"],
+    transpileDependencies: ['vuetify'],
 
-  pwa: {
-    name: "Český Slovník"
-  }
+    pwa: {
+        name: 'Český Slovník',
+    },
 };

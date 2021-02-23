@@ -1,6 +1,5 @@
-import Vue from "vue";
-import VueRouter, {RouteConfig} from "vue-router";
-import Home from "../views/Home.vue";
+import Vue from 'vue';
+import VueRouter, { RouteConfig } from 'vue-router';
 
 Vue.use(VueRouter);
 
@@ -8,24 +7,24 @@ const routes: Array<RouteConfig> = [
     {
         path: '/',
         name: 'Home',
-        component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue')
+        component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
     },
     {
         path: '/lists',
         name: 'Lists',
-        component: () => import(/* webpackChunkName: "lists" */ '../views/Lists.vue')
+        component: () => import(/* webpackChunkName: "lists" */ '../views/Lists.vue'),
     },
     {
         path: '/list/:id',
         name: 'List :id',
-        component: () => import(/* webpackChunkName: "list" */ '../views/List.vue')
+        component: () => import(/* webpackChunkName: "list" */ '../views/List.vue'),
     },
 ];
 
 const router = new VueRouter({
-    mode: "history",
+    mode: 'history',
     base: process.env.BASE_URL,
-    routes
+    routes,
 });
 
 export default router;

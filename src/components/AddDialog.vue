@@ -2,15 +2,11 @@
     <div>
         <v-dialog v-model="shown" max-width="290" @click:outside="cancel">
             <template v-slot:activator="{ on, attrs }">
-                <v-btn color="accent" dark v-bind="attrs" v-on="on">
-                    Add word
-                </v-btn>
+                <v-btn color="accent" dark v-bind="attrs" v-on="on"> Add word </v-btn>
             </template>
             <v-form ref="form" lazy-validation v-if="logged">
                 <v-card>
-                    <v-card-title class="headline">
-                        Add new word?
-                    </v-card-title>
+                    <v-card-title class="headline"> Add new word? </v-card-title>
                     <v-card-text>
                         <v-text-field
                             validate-on-blur="false"
@@ -30,23 +26,15 @@
                         <p v-if="error" class="red--text darken-3">Error. Try again</p>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn color="green darken-1" text @click="cancel">
-                            Close
-                        </v-btn>
-                        <v-btn color="green darken-1" text @click="addWord">
-                            Add
-                        </v-btn>
+                        <v-btn color="green darken-1" text @click="cancel"> Close </v-btn>
+                        <v-btn color="green darken-1" text @click="addWord"> Add </v-btn>
                     </v-card-actions>
                 </v-card>
             </v-form>
             <v-card v-else>
-                <v-card-title class="headline">
-                    You must login
-                </v-card-title>
+                <v-card-title class="headline"> You must login </v-card-title>
                 <v-card-actions>
-                    <v-btn color="green darken-1" text @click="cancel">
-                        OK
-                    </v-btn>
+                    <v-btn color="green darken-1" text @click="cancel"> OK </v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
