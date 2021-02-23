@@ -75,15 +75,15 @@ export default Vue.extend({
         passwordRules: [(value: any) => !!value || 'Required'],
         token: '',
         error: false,
-        logged: Api.getInstance().auth.token !== null,
-        userData: {},
     }),
-    updated() {
-        this.logged = Api.getInstance().auth.token !== null;
-        if (Api.getInstance().auth.token !== null && Object.keys(this.userData).length === 0)
-            Api.getInstance()
-                .users.me.read()
-                .then((data) => (this.userData = data.data));
+    computed: {
+        logged: () => store.state.auth.logged,
+        userData: () => store.state.auth.userData,
+    },
+    async updated() {
+        store.dispatch('setLogged', Api.getInstance().auth.token !== null);
+        if (this.logged && Object.keys(this.userData).length === 0)
+            store.dispatch('setUserData', (await Api.getInstance().users.me.read()).data);
     },
     methods: {
         login(e: Event) {
