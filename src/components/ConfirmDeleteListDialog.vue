@@ -35,7 +35,9 @@ export default {
             this.loading = true;
             Api.getInstance()
                 .items('lists')
-                .delete(this.$props.list.id)
+                .update(this.$props.list.id, {
+                    status: 'archived',
+                })
                 .then(() => this.$props.successHandler())
                 .then(() => this.cancel())
                 .catch(() => (this.error = true));
