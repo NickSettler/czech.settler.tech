@@ -36,6 +36,7 @@ export default class Api extends DirectusSDK {
                 auth: {
                     storage: localforage,
                     mode: 'json',
+                    autoRefresh: true,
                 },
             });
         }
