@@ -96,6 +96,8 @@ export default {
                     });
                 });
         }
+
+        this.$ga.page(this.$router);
     },
 };
 </script>
