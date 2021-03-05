@@ -12,6 +12,7 @@ Vue.use(
     VueGtag,
     {
         config: { id: 'G-FT153D4QDG' },
+        appName: 'czech.settler.tech',
         pageTrackerScreenviewEnabled: true,
         pageTrackerEnabled: true,
     },
