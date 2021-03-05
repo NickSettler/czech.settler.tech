@@ -1,10 +1,10 @@
 <template>
     <div>
-        <v-dialog v-model="shown" max-width="300">
+        <v-dialog v-model="shown" max-width="300" @click:outside="cancel">
             <template v-slot:activator="{ on, attrs }">
                 <v-btn color="accent" v-bind="attrs" v-on="on"> Add List </v-btn>
             </template>
-            <v-form @submit.prevent="submitHandler">
+            <v-form @submit.prevent="submitHandler" ref="form">
                 <v-card>
                     <v-card-title>Create new list</v-card-title>
                     <v-card-text>
@@ -63,6 +63,8 @@ export default {
             this.name = '';
             this.loading = false;
             this.shown = false;
+            this.error = false;
+            this.$refs.form.resetValidation();
         },
     },
 };
