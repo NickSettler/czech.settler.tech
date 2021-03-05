@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import Vuex, { StoreOptions } from 'vuex';
 import Api from '@/classes/api';
+import localforage from 'localforage';
 
 Vue.use(Vuex);
 
 const authModule: StoreOptions<any> = {
     state: {
-        logged: Api.getInstance().auth.token !== null,
+        logged: false,
         userData: {},
     },
     mutations: {
@@ -14,8 +15,9 @@ const authModule: StoreOptions<any> = {
         setUserData: (state, data) => (state.userData = data),
     },
     actions: {
-        setLogged: ({ commit }) => commit('setLogged', Api.getInstance().auth.token !== null),
-        setUserData: async ({ commit }) => commit('setUserData', (await Api.getInstance().users.me.read()).data),
+        setLogged: async ({ commit }) =>
+            commit('setLogged', (await localforage.getItem('directus_access_token')) !== null),
+        setUserData: ({ commit }, data) => commit('setUserData', data),
     },
 };
 

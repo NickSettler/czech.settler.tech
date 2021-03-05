@@ -60,6 +60,7 @@ import Vue from 'vue';
 import { VForm } from '@/classes/types/vuetify';
 import { LoginCredentials } from '@directus/sdk-js/dist/types/handlers';
 import store from '@/store/index';
+import localforage from 'localforage';
 
 export default Vue.extend({
     name: 'LoginDialog',
@@ -81,9 +82,10 @@ export default Vue.extend({
         userData: () => store.state.auth.userData,
     },
     async updated() {
-        store.dispatch('setLogged', Api.getInstance().auth.token !== null);
+        if (store.state.auth.logged !== ((await localforage.getItem('directus_access_token')) !== null))
+            await store.dispatch('setLogged');
         if (this.logged && Object.keys(this.userData).length === 0)
-            store.dispatch('setUserData', (await Api.getInstance().users.me.read()).data);
+            await store.dispatch('setUserData', (await Api.getInstance().users.me.read()).data);
     },
     methods: {
         login(e: Event) {

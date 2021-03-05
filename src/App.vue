@@ -71,20 +71,20 @@ import store from '@/store/index';
 import Api from '@/classes/api';
 
 export default {
+    name: 'App',
     components: { LoginDialog },
     store: store,
-    mounted() {
-        store.dispatch('setLogged', Api.getInstance().auth.token !== null);
+    async mounted() {
+        await store.dispatch('setLogged');
 
-        if (Api.getInstance().auth.token !== null && Object.keys(store.state.auth.userData).length !== 0) {
-            console.log('asd');
+        if (store.state.auth.logged && Object.keys(store.state.auth.userData).length === 0) {
             Api.getInstance()
                 .users.me.read()
                 .then((data) => store.dispatch('setUserData', data.data))
-                .then((d) => {
+                .then(() => {
                     return Api.getInstance().roles.read({
                         filter: {
-                            id: d.data.role,
+                            id: store.state.auth.userData.role,
                         },
                         single: true,
                     });
@@ -94,8 +94,7 @@ export default {
                         ...store.state.auth.userData,
                         admin_access: role.data!.admin_access,
                     });
-                })
-                .then(() => console.log(store.state.auth.userData));
+                });
         }
     },
 };
