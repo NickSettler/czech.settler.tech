@@ -30,6 +30,9 @@ import ListMenu from '@/components/ListMenu';
 export default {
     name: 'Lists',
     components: { ListMenu, AddListDialog },
+    metaInfo: {
+        title: 'Lists',
+    },
     async mounted() {
         await this.getLists();
     },

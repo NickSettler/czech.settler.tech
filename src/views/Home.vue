@@ -14,6 +14,9 @@ import Api from '@/classes/api.ts';
 
 export default {
     name: 'Home',
+    metaInfo: {
+        title: 'Home',
+    },
     async mounted() {
         this.lists = (await Api.getInstance().items('lists').read()).data;
     },

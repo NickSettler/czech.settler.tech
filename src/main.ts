@@ -5,6 +5,7 @@ import router from './router';
 import store from './store';
 import vuetify from './plugins/vuetify';
 import VueGtag from 'vue-gtag';
+import Meta from 'vue-meta';
 
 Vue.config.productionTip = false;
 
@@ -18,6 +19,8 @@ Vue.use(
     },
     router,
 );
+
+Vue.use(Meta);
 
 new Vue({
     router,

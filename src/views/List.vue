@@ -79,6 +79,9 @@ import EditDialog from '@/components/EditDialog';
 export default {
     name: 'List',
     components: { EditDialog, AddDialog },
+    metaInfo: {
+        title: 'List',
+    },
     async mounted() {
         this.reloadWords();
 
