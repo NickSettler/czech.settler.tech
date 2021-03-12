@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex, { StoreOptions } from 'vuex';
-import Api from '@/classes/api';
 import localforage from 'localforage';
+import { listsModule } from '@/store/lists.module';
 
 Vue.use(Vuex);
 
@@ -27,5 +27,6 @@ export default new Vuex.Store({
     actions: {},
     modules: {
         auth: authModule,
+        lists: listsModule,
     },
 });

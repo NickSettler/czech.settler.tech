@@ -1,7 +1,18 @@
 <template>
     <div>
-        <div class="d-flex flex-row mb-4">
-            <AddListDialog :success-handler="getLists" />
+        <div class="d-flex flex-row mb-4 align-baseline justify-start">
+            <AddListDialog :success-handler="getLists" class="mr-2" />
+            <v-row>
+                <v-col cols="4">
+                    <v-select
+                        v-model="sortOption"
+                        :items="sortOptionsArray"
+                        color="accent"
+                        :full-width="false"
+                        item-color="accent"
+                    ></v-select>
+                </v-col>
+            </v-row>
         </div>
         <transition-group name="lists">
             <v-card
@@ -22,33 +33,78 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import Api from '@/classes/api.ts';
-import AddListDialog from '@/components/AddListDialog';
-import ListMenu from '@/components/ListMenu';
+import AddListDialog from '@/components/AddListDialog.vue';
+import ListMenu from '@/components/ListMenu.vue';
+import store from '@/store/index';
+
+type SortOption = {
+    name: string;
+    field: string;
+};
+
+type ListsDataType = {
+    lists: [];
+    sortOption: string;
+    sortOptions: SortOption[];
+};
 
 export default {
     name: 'Lists',
     components: { ListMenu, AddListDialog },
+    store: store,
     metaInfo: {
         title: 'Lists',
+        sortOptions: [],
     },
     async mounted() {
-        await this.getLists();
+        await this.retrieveLists();
+        this.$watch('sortOptions', () => {}, { deep: true });
     },
-    data: () => ({
+    data: (): ListsDataType => ({
         lists: [],
+        sortOption: store.state.lists.listSort,
+        sortOptions: [
+            { name: 'Date Created', field: 'date_created' },
+            { name: 'Date Updated', field: 'date_updated' },
+        ],
     }),
+    watch: {
+        sortOption(sort: string) {
+            store.dispatch('setListSort', sort);
+            this.sortLists(this.lists);
+        },
+    },
+    computed: {
+        sortOptionsArray() {
+            return this.sortOptions.map((option: SortOption) => option.name, []);
+        },
+        sortOptionField() {
+            return this.sortOptions.find((option: SortOption) => option.name === this.sortOption).field;
+        },
+    },
     methods: {
+        async retrieveLists() {
+            this.lists = await this.getLists().then(this.sortLists);
+        },
+        sortLists(lists: []) {
+            console.log(lists);
+            return lists.sort((a, b) => {
+                const aDate = new Date(a[this.sortOptionField]);
+                const bDate = new Date(b[this.sortOptionField]);
+
+                return aDate > bDate ? -1 : aDate < bDate ? 1 : 0;
+            });
+        },
         async getLists() {
-            this.lists = (
+            return (
                 await Api.getInstance()
                     .items('lists')
                     .read({
                         filter: {
                             status: 'published',
                         },
-                        sort: 'date_created',
                     })
             ).data;
         },
