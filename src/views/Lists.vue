@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="d-flex flex-row mb-4 align-baseline justify-start">
-            <AddListDialog :success-handler="getLists" class="mr-2" />
+            <AddListDialog :success-handler="retrieveLists" class="mr-2" />
             <v-row>
                 <v-col cols="4">
                     <v-select
@@ -26,7 +26,7 @@
                 <v-app-bar flat color="rgba(0,0,0,0)">
                     <v-toolbar-title> {{ list.name }} </v-toolbar-title>
                     <v-spacer />
-                    <ListMenu :list="list" :success-handler="getLists" />
+                    <ListMenu :list="list" :success-handler="retrieveLists" />
                 </v-app-bar>
             </v-card>
         </transition-group>
