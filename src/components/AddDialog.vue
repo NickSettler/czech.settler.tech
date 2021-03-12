@@ -4,7 +4,7 @@
             <template v-slot:activator="{ on, attrs }">
                 <v-btn color="accent" dark v-bind="attrs" v-on="on"> Add word </v-btn>
             </template>
-            <v-form ref="form" lazy-validation v-if="logged">
+            <v-form ref="form" lazy-validation v-if="logged" @submit.prevent>
                 <v-card>
                     <v-card-title class="headline"> Add new word? </v-card-title>
                     <v-card-text>
@@ -14,6 +14,7 @@
                             v-model="czech"
                             placeholder="Czech"
                             @input="error = false"
+                            :loading="loading"
                         />
                         <v-text-field
                             validate-on-blur="false"
@@ -21,13 +22,21 @@
                             v-model="russian"
                             placeholder="Russian"
                             @input="error = false"
+                            :loading="loading"
                         />
-                        <v-textarea v-model="description" placeholder="Description"></v-textarea>
+                        <v-textarea
+                            v-model="description"
+                            placeholder="Description"
+                            :loading="loading && !!description"
+                            :disabled="loading && !description"
+                        ></v-textarea>
                         <p v-if="error" class="red--text darken-3">Error. Try again</p>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn color="green darken-1" text @click="cancel"> Close </v-btn>
-                        <v-btn color="green darken-1" text @click="addWord"> Add </v-btn>
+                        <v-btn color="green darken-1" text @click="cancel" :loading="loading"> Close </v-btn>
+                        <v-btn type="submit" color="green darken-1" text @click="addWord" :loading="loading">
+                            Add
+                        </v-btn>
                     </v-card-actions>
                 </v-card>
             </v-form>
@@ -54,6 +63,7 @@ export default {
         description: "",
         wordRules: [value => !!value || "Required"],
         logged: Api.getInstance().auth.token !== null,
+        loading: false,
         error: false
     }),
     updated() {
@@ -61,6 +71,7 @@ export default {
     },
     methods: {
         addWord() {
+            this.loading = true;
             if (this.$refs.form.validate()) {
                 Api.getInstance()
                     .items("words")
@@ -81,6 +92,7 @@ export default {
                         this.cancel();
                     })
                     .catch(() => {
+                        this.loading = false;
                         this.error = true;
                     });
             }
@@ -90,6 +102,9 @@ export default {
             this.russian = "";
             this.description = "";
             this.shown = false;
+            this.loading = false;
+            this.error = false;
+            this.$refs.form.resetValidation();
             this.reloadWords();
         }
     }
