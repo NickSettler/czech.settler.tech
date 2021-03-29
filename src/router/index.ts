@@ -3,7 +3,16 @@ import VueRouter, { RouteConfig } from 'vue-router';
 
 Vue.use(VueRouter);
 
-const routes: Array<RouteConfig> = [
+type RouteMeta = {
+    isAuthorized?: boolean;
+    isAdmin?: boolean;
+};
+
+type CustomRoute = RouteConfig & {
+    meta?: RouteMeta;
+};
+
+const routes: Array<CustomRoute> = [
     {
         path: '/',
         name: 'Home',
