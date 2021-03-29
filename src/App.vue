@@ -97,6 +97,8 @@ export default {
     async mounted() {
         await store.dispatch('setLogged');
 
+        console.log('asd');
+
         if (store.state.auth.logged && Object.keys(store.state.auth.userData).length === 0) {
             Api.getInstance()
                 .users.me.read()

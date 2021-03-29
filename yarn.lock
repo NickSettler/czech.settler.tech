@@ -843,10 +843,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@directus/sdk-js@^9.0.0-rc.51":
-  version "9.0.0-rc.51"
-  resolved "https://registry.yarnpkg.com/@directus/sdk-js/-/sdk-js-9.0.0-rc.51.tgz#8d290c1faf16df59aed8bcbfa3ecfd4cfd324618"
-  integrity sha512-EHnIsk96QTcr+bRnpdtnuc+azUlvs91DE9c8Az5xFCnlxtghxxLI4oBJoSOd6rZ4ksXfvifrGiVuQ+mU0qewMQ==
+"@directus/sdk-js@^9.0.0-rc.52":
+  version "9.0.0-rc.52"
+  resolved "https://registry.yarnpkg.com/@directus/sdk-js/-/sdk-js-9.0.0-rc.52.tgz#9aa0786c8a397838da1fdc9e7d9a09a33bd49623"
+  integrity sha512-FLcBgmkdC8PRMIDmbsqTyvPsCCb0KX/jrtqSDxZz8r8yn0y9NVjOzfv6lhYiICMn02UgSH+PtO/iJ8LSFDMqWg==
   dependencies:
     axios "^0.21.1"
     openapi3-ts "^2.0.0"
