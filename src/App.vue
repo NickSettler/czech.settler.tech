@@ -22,6 +22,7 @@
             <v-container>
                 <v-row>
                     <v-col :cols="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm ? 12 : 2">
+                        <v-subheader>Language</v-subheader>
                         <v-sheet rounded="lg" class="mb-2">
                             <v-list color="transparent" dense>
                                 <v-list-item link to="/">
