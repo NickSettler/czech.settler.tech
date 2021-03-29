@@ -1,11 +1,6 @@
 <template>
     <div>
         <v-dialog v-model="shown" max-width="290">
-            <template v-slot:activator="{ on, attrs }">
-                <v-btn icon class="mr-2" v-bind="attrs" v-on="on">
-                    <v-icon>mdi-account-circle</v-icon>
-                </v-btn>
-            </template>
             <v-form
                 id="login-form"
                 v-if="!logged"
@@ -39,8 +34,10 @@
                         <p v-if="error" class="red--text darken-3">Error. Try again</p>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn color="green darken-1" text @click="shown = false"> Close </v-btn>
                         <v-btn type="submit" color="green darken-1" text> Login </v-btn>
+                        <v-btn color="green darken-1" text @click="cancel"> Close </v-btn>
+                        <v-spacer />
+                        <v-btn text color="grey darken-1" @click="$props.openSignUp()">Sign Up</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-form>
@@ -64,9 +61,9 @@ import localforage from 'localforage';
 
 export default Vue.extend({
     name: 'LoginDialog',
+    props: ['visible', 'cancelMethod', 'openMethod', 'openSignUp'],
     store: store,
     data: () => ({
-        shown: false,
         email: '',
         password: '',
         emailRules: [
@@ -80,6 +77,14 @@ export default Vue.extend({
     computed: {
         logged: () => store.state.auth.logged,
         userData: () => store.state.auth.userData,
+        shown: {
+            get() {
+                return this.$props.visible;
+            },
+            set() {
+                this.cancel();
+            },
+        },
     },
     async updated() {
         if (store.state.auth.logged !== ((await localforage.getItem('directus_access_token')) !== null))
@@ -107,11 +112,11 @@ export default Vue.extend({
                                 password: e.target as HTMLFormElement,
                             });
 
-                            this.shown = false;
+                            this.cancel();
 
                             return navigator.credentials.store(c!);
                         } else {
-                            this.shown = false;
+                            this.cancel();
                             return Promise.resolve();
                         }
                     })
@@ -124,8 +129,16 @@ export default Vue.extend({
             Api.getInstance()
                 .auth.logout()
                 .then(() => {
-                    this.shown = false;
+                    this.cancel();
                 });
+        },
+        open() {
+            this.error = false;
+            this.$props.openMethod();
+        },
+        cancel() {
+            this.error = false;
+            this.$props.cancelMethod();
         },
     },
 });

@@ -9,8 +9,9 @@
                 <v-responsive max-width="260" class="mr-6" v-if="!$vuetify.breakpoint.xs">
                     <v-text-field dense flat hide-details rounded solo-inverted></v-text-field>
                 </v-responsive>
-
-                <LoginDialog />
+                <v-btn icon class="mr-2" @click="openLoginDialog">
+                    <v-icon>mdi-account-circle</v-icon>
+                </v-btn>
 
                 <v-btn icon>
                     <v-icon>mdi-dots-vertical</v-icon>
@@ -64,17 +65,35 @@
                 </v-row>
             </v-container>
         </v-main>
+
+        <LoginDialog
+            :visible="loginDialogVisible"
+            :cancel-method="cancelLoginDialog"
+            :open-method="openLoginDialog"
+            :open-sign-up="openSignUpDialog"
+        />
+        <SignUpDialog
+            :visible="signUpDialogVisible"
+            :cancel-method="cancelSignUpDialog"
+            :open-method="openSignUpDialog"
+            :back-action="openLoginDialog"
+        />
     </v-app>
 </template>
 <script lang="ts">
 import LoginDialog from '@/components/LoginDialog.vue';
 import store from '@/store/index';
 import Api from '@/classes/api';
+import SignUpDialog from '@/components/global/SignUpDialog.vue';
 
 export default {
     name: 'App',
-    components: { LoginDialog },
+    components: { SignUpDialog, LoginDialog },
     store: store,
+    data: () => ({
+        loginDialogVisible: false,
+        signUpDialogVisible: false,
+    }),
     async mounted() {
         await store.dispatch('setLogged');
 
@@ -97,6 +116,26 @@ export default {
                     });
                 });
         }
+    },
+    computed: {
+        isAdmin() {
+            return this.$store.state.auth.logged && this.$store.state.auth.userData?.admin_access;
+        },
+    },
+    methods: {
+        openLoginDialog() {
+            this.loginDialogVisible = true;
+        },
+        cancelLoginDialog() {
+            this.loginDialogVisible = false;
+        },
+        openSignUpDialog() {
+            this.loginDialogVisible = false;
+            this.signUpDialogVisible = true;
+        },
+        cancelSignUpDialog() {
+            this.signUpDialogVisible = false;
+        },
     },
 };
 </script>
