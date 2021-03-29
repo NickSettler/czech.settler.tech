@@ -1,6 +1,6 @@
 {
   "name": "czech-slovnik",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve",
@@ -58,7 +58,7 @@
     "*.{js,jsx,vue,ts,tsx}": [
       "vue-cli-service lint",
       "git add",
-      "npm version patch"
+      "npm --no-git-tag-version version patch"
     ]
   }
 }
