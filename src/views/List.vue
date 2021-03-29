@@ -21,7 +21,7 @@
                 <v-icon> mdi-google-translate </v-icon>
             </v-btn>
             <v-spacer></v-spacer>
-            <AddDialog :list-id="this.$router.currentRoute.params.id" :reload-words="reloadWords" />
+            <AddDialog v-if="logged" :list-id="this.$router.currentRoute.params.id" :reload-words="reloadWords" />
         </div>
         <div v-if="displayStyle === 'list'">
             <EditDialog

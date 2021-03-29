@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="d-flex flex-row mb-4 align-baseline justify-start">
-            <AddListDialog :success-handler="retrieveLists" class="mr-2" />
+            <AddListDialog v-if="logged" :success-handler="retrieveLists" class="mr-2" />
             <v-row>
                 <v-col cols="4">
                     <v-select
@@ -77,10 +77,13 @@ export default {
         },
     },
     computed: {
-        sortOptionsArray() {
+        logged(): boolean {
+            return this.$store.state.auth.logged;
+        },
+        sortOptionsArray(): Array<SortOption> {
             return this.sortOptions.map((option: SortOption) => option.name, []);
         },
-        sortOptionField() {
+        sortOptionField(): string {
             return this.sortOptions.find((option: SortOption) => option.name === this.sortOption).field;
         },
     },
@@ -89,7 +92,6 @@ export default {
             this.lists = await this.getLists().then(this.sortLists);
         },
         sortLists(lists: []) {
-            console.log(lists);
             return lists.sort((a, b) => {
                 const aDate = new Date(a[this.sortOptionField]);
                 const bDate = new Date(b[this.sortOptionField]);
