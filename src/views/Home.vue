@@ -68,7 +68,17 @@ export default {
             this.lists = await this.getLists();
         },
         async getLists() {
-            return (await Api.getInstance().items('lists').read()).data;
+            const filterObject: Record<string, string> = {
+                status: 'published',
+            };
+
+            if (this.logged) filterObject.user_created = '$CURRENT_USER';
+
+            return (
+                await Api.getInstance().items('lists').read({
+                    filter: filterObject,
+                })
+            ).data;
         },
     },
 };

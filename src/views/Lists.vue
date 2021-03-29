@@ -100,14 +100,16 @@ export default {
             });
         },
         async getLists() {
+            const filterObject: Record<string, string> = {
+                status: 'published',
+            };
+
+            if (this.logged) filterObject.user_created = '$CURRENT_USER';
+
             return (
-                await Api.getInstance()
-                    .items('lists')
-                    .read({
-                        filter: {
-                            status: 'published',
-                        },
-                    })
+                await Api.getInstance().items('lists').read({
+                    filter: filterObject,
+                })
             ).data;
         },
     },

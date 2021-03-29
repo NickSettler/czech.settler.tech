@@ -1,5 +1,8 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
+import Api from '@/classes/api';
+import store from '@/store';
+import localforage from 'localforage';
 
 Vue.use(VueRouter);
 
@@ -39,6 +42,14 @@ const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes,
+});
+
+router.beforeEach(async (to, from, next) => {
+    if (Api.getInstance().auth.token === null && (await localforage.getItem('directus_access_token')) !== null) {
+        store.dispatch('setLogged').then(next);
+    } else {
+        next();
+    }
 });
 
 export default router;
