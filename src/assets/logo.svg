@@ -1,1 +1,67 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 87.5 100"><defs><style>.cls-1{fill:#1697f6;}.cls-2{fill:#7bc6ff;}.cls-3{fill:#1867c0;}.cls-4{fill:#aeddff;}</style></defs><title>Artboard 46</title><polyline class="cls-1" points="43.75 0 23.31 0 43.75 48.32"/><polygon class="cls-2" points="43.75 62.5 43.75 100 0 14.58 22.92 14.58 43.75 62.5"/><polyline class="cls-3" points="43.75 0 64.19 0 43.75 48.32"/><polygon class="cls-4" points="64.58 14.58 87.5 14.58 43.75 100 43.75 62.5 64.58 14.58"/></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" fill="#664941" fill-rule="evenodd" clip-rule="evenodd"
+     x="0px" y="0px" width="300" height="300" viewBox="74 550 300 300" xml:space="preserve">
+<g>
+    <rect x="164.757" y="792.684" fill-rule="evenodd" clip-rule="evenodd" fill="#664941" width="118.723"
+          height="56.521"/>
+    <polygon fill-rule="evenodd" clip-rule="evenodd" fill="#F5E2D4" points="222.864,640.549 222.864,640.418 222.864,628.797
+			225.506,628.797 225.506,640.418 225.374,640.549 		"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" fill="#FCD007" d="M222.864,628.797c-1.717-0.527-2.907-2.115-2.907-3.961
+			c0-2.248,1.85-4.096,4.227-4.096c2.245,0,4.095,1.848,4.095,4.096c0,1.846-1.189,3.434-2.772,3.961H222.864z"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" fill="#F5E2D4" d="M203.583,684.789h-3.039h-3.037v-39.354h-25.883v39.354h-13.735
+			v7.662h3.963v27.861h-3.963v7.926h3.963v49.787h-13.604v7.656h3.567v63.523h10.036h9.11v-24.301c0-2.375,3.831-6.602,7-7.525
+			c3.171,0.924,7.132,5.15,7.132,7.525v24.301h27.072v-41.598c0-4.096,6.604-11.225,12.018-12.813
+			c5.414,1.588,12.019,8.717,12.019,12.813v41.598h27.072v-24.301c0-2.375,3.831-6.602,6.999-7.525
+			c3.301,0.924,7.132,5.15,7.132,7.525v24.301h8.979h10.171v-63.523h3.564v-7.656h-13.735v-49.787h4.095v-7.926h-4.095v-27.861
+			h4.095v-7.662h-13.735v-39.354h-26.015v39.354h-3.037h-2.907H203.583z"/>
+    <polygon fill-rule="evenodd" clip-rule="evenodd" fill="#664941" points="222.864,635.928 203.583,685.582 244.784,685.582
+			225.506,635.928 		"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" fill="#664941" d="M197.507,645.436l2.51-2.375v-6.869h-2.378v-7.395
+			l-13.073-71.314l-13.073,71.314v7.395h-2.245v6.869l2.377,2.375H197.507z M276.743,645.436l2.378-2.375v-6.869h-2.243v-7.395
+			l-13.076-71.314l-13.205,71.314v7.395h-2.245v6.869l2.377,2.375H276.743z"/>
+    <polygon fill-rule="evenodd" clip-rule="evenodd" fill="#F5E2D4" points="183.906,561.313 183.906,561.313 183.906,554.844
+			185.357,554.844 185.357,561.313 185.226,561.313 		"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" fill="#FCD007" d="M183.906,554.844c-0.926-0.264-1.586-1.191-1.586-2.248
+			c0-1.188,0.926-2.242,2.245-2.242c1.322,0,2.378,1.055,2.378,2.242c0,1.057-0.66,1.984-1.586,2.248H183.906z"/>
+    <polygon fill-rule="evenodd" clip-rule="evenodd" fill="#F5E2D4" points="263.011,561.313 263.011,561.313 263.011,554.844
+			264.462,554.844 264.462,561.313 264.462,561.313 		"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" fill="#FCD007" d="M263.011,554.844c-0.924-0.264-1.586-1.191-1.586-2.248
+			c0-1.188,1.058-2.242,2.377-2.242c1.19,0,2.245,1.055,2.245,2.242c0,1.057-0.659,1.984-1.585,2.248H263.011z"/>
+    <rect x="174.397" y="739.33" fill-rule="evenodd" clip-rule="evenodd" fill="#664941" width="8.451"
+          height="27.34"/>
+    <rect x="265.52" y="739.33" fill-rule="evenodd" clip-rule="evenodd" fill="#664941" width="8.319"
+          height="27.34"/>
+    <rect x="259.575" y="666.168" fill-rule="evenodd" clip-rule="evenodd" fill="#664941" width="8.453"
+          height="11.092"/>
+    <rect x="259.575" y="648.871" fill-rule="evenodd" clip-rule="evenodd" fill="#664941" width="8.453"
+          height="11.092"/>
+    <rect x="180.339" y="648.871" fill-rule="evenodd" clip-rule="evenodd" fill="#664941" width="8.321"
+          height="11.092"/>
+    <rect x="180.339" y="666.168" fill-rule="evenodd" clip-rule="evenodd" fill="#664941" width="8.321"
+          height="11.092"/>
+    <rect x="157.889" y="684.789" fill-rule="evenodd" clip-rule="evenodd" fill="#664941" width="132.59"
+          height="7.662"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M221.543,666.037v6.338h2.641h2.642v-6.338
+			C226.825,661.678,221.543,661.678,221.543,666.037L221.543,666.037z"/>
+    <rect x="161.852" y="692.451" fill-rule="evenodd" clip-rule="evenodd" fill="#D6BDA2" width="124.532"
+          height="3.166"/>
+    <rect x="157.889" y="720.313" fill-rule="evenodd" clip-rule="evenodd" fill="#664941" width="132.59"
+          height="7.662"/>
+    <rect x="161.852" y="727.975" fill-rule="evenodd" clip-rule="evenodd" fill="#D6BDA2" width="124.532"
+          height="3.166"/>
+    <rect x="148.248" y="778.025" fill-rule="evenodd" clip-rule="evenodd" fill="#664941" width="151.871"
+          height="7.656"/>
+    <rect x="151.815" y="785.682" fill-rule="evenodd" clip-rule="evenodd" fill="#D6BDA2" width="144.739"
+          height="3.172"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" fill="#FCD007" d="M224.184,735.764c9.905,0,17.828,8.059,17.828,17.963
+			s-7.923,17.961-17.828,17.961c-9.904,0-17.959-8.057-17.959-17.961S214.279,735.764,224.184,735.764L224.184,735.764z"/>
+    <rect x="180.207" y="702.885" fill-rule="evenodd" clip-rule="evenodd" fill="#664941" width="10.037"
+          height="9.375"/>
+    <rect x="206.093" y="702.885" fill-rule="evenodd" clip-rule="evenodd" fill="#664941" width="10.036"
+          height="9.375"/>
+    <rect x="232.107" y="702.885" fill-rule="evenodd" clip-rule="evenodd" fill="#664941" width="10.036"
+          height="9.375"/>
+    <rect x="258.124" y="702.885" fill-rule="evenodd" clip-rule="evenodd" fill="#664941" width="10.036"
+          height="9.375"/>
+</g>
+</svg>
