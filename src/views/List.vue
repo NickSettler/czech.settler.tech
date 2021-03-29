@@ -71,14 +71,25 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import Api from '@/classes/api.ts';
-import AddDialog from '@/components/AddDialog';
-import EditDialog from '@/components/EditDialog';
+import AddDialog from '@/components/AddDialog.vue';
+import EditDialog from '@/components/EditDialog.vue';
+import store from '@/store';
+import { VariableModel } from '@/classes/types/directus';
+
+type ListDataType = {
+    words: Array<VariableModel>;
+    searchQuery: string;
+    displayStyle: string;
+    displayTranslation: string;
+    editingId: number;
+};
 
 export default {
     name: 'List',
     components: { EditDialog, AddDialog },
+    store: store,
     metaInfo: {
         title: 'List',
     },
@@ -101,16 +112,17 @@ export default {
             this.displayTranslation = localStorage.getItem(`list-${this.$router.currentRoute.params.id}-translation`);
         }
     },
-    data: () => ({
+    data: (): ListDataType => ({
         words: [],
         searchQuery: '',
         displayStyle: 'list',
         displayTranslation: 'czech',
         editingId: -1,
-        logged: Api.getInstance().auth.token !== null,
     }),
-    updated() {
-        this.logged = Api.getInstance().auth.token !== null;
+    computed: {
+        logged() {
+            return this.$store.state.auth.logged;
+        },
     },
     methods: {
         async reloadWords() {
@@ -124,7 +136,7 @@ export default {
                         },
                         limit: 1000,
                     })
-            ).data.map((relation) => relation.words_id);
+            ).data.map((relation: VariableModel) => relation.words_id);
 
             this.words = (
                 await Api.getInstance()
@@ -137,18 +149,18 @@ export default {
                         },
                     })
             ).data
-                .map((word) => {
+                .map((word: VariableModel) => {
                     word['hidden'] = true;
 
                     return word;
                 })
-                .sort((a, b) => {
+                .sort((a: VariableModel, b: VariableModel) => {
                     const aDate = new Date(a.date_created);
                     const bDate = new Date(b.date_created);
 
                     return aDate > bDate ? -1 : 1;
                 })
-                .sort((a, b) => {
+                .sort((a: VariableModel, b: VariableModel) => {
                     if (a.date_updated === null && b.date_updated === null) return 0;
 
                     const aDate = new Date(a.date_updated);
@@ -157,12 +169,12 @@ export default {
                     return aDate > bDate ? -1 : 1;
                 });
         },
-        selectStyle(style) {
+        selectStyle(style: string) {
             this.displayStyle = style;
             localStorage.setItem(`list-${this.$router.currentRoute.params.id}-style`, style);
         },
         toggleTranslation() {
-            this.words = this.words.map((word) => {
+            this.words = this.words.map((word: VariableModel) => {
                 word.hidden = true;
                 return word;
             });
@@ -172,8 +184,10 @@ export default {
             );
             this.displayTranslation = this.displayTranslation === 'czech' ? 'russian' : 'czech';
         },
-        unhideWord(id) {
-            this.words.find((word) => word.id === id).hidden = !this.words.find((word) => word.id === id).hidden;
+        unhideWord(id: unknown) {
+            this.words.find((word: VariableModel) => word.id === id).hidden = !this.words.find(
+                (word: VariableModel) => word.id === id,
+            ).hidden;
         },
         cancelEdit() {
             this.reloadWords();

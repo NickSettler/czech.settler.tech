@@ -29,8 +29,8 @@
     </div>
 </template>
 
-<script lang="js">
-import * as store from '@/store';
+<script lang="ts">
+import store from '@/store';
 import Api from '@/classes/api';
 
 export default {
@@ -40,14 +40,13 @@ export default {
     data: () => ({
         name: '',
         shown: false,
-        nameRules: [value => !!value || 'Required'],
+        nameRules: [(value: string) => !!value || 'Required'],
         loading: false,
         error: false,
     }),
     methods: {
         submitHandler() {
-            if(this.loading)
-                return;
+            if (this.loading) return;
 
             this.loading = true;
             Api.getInstance()
@@ -57,7 +56,7 @@ export default {
                 })
                 .then(() => this.$props.successHandler())
                 .then(() => this.cancel())
-                .catch(() => this.error = true);
+                .catch(() => (this.error = true));
         },
         cancel() {
             this.name = '';

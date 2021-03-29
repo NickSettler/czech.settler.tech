@@ -9,11 +9,18 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import Api from '@/classes/api.ts';
+import store from '@/store/index';
+import { VariableModel } from '@/classes/types/directus';
+
+type HomeDataType = {
+    lists: Array<VariableModel>;
+};
 
 export default {
     name: 'Home',
+    store: store,
     metaInfo: {
         title: 'Home',
     },
