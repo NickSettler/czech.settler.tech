@@ -1,12 +1,14 @@
 <template>
-    <div>
-        <div class="d-flex justify-end mb-4">
-            <CreateNoteDialog :success-handler="reloadNotes" />
+    <v-sheet class="pa-4" min-height="70vh" rounded="lg">
+        <div>
+            <div class="d-flex justify-end mb-4">
+                <CreateNoteDialog :success-handler="reloadNotes" />
+            </div>
+            <template v-for="(note, i) in notes">
+                <NoteItem :key="note.id" :note="note" :final="i + 1 !== notes.length" :reload-handler="reloadNotes" />
+            </template>
         </div>
-        <template v-for="(note, i) in notes">
-            <NoteItem :key="note.id" :note="note" :final="i + 1 !== notes.length" :reload-handler="reloadNotes" />
-        </template>
-    </div>
+    </v-sheet>
 </template>
 
 <script lang="ts">

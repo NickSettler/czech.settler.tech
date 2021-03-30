@@ -1,75 +1,77 @@
 <template>
-    <div>
-        <div class="d-flex flex-row mb-4 align-end">
-            <v-btn
-                class="mr-2"
-                :depressed="displayStyle === 'list'"
-                :color="displayStyle === 'list' ? 'primary' : 'accent'"
-                @click="selectStyle('list')"
-            >
-                List
-            </v-btn>
-            <v-btn
-                class="mr-2"
-                :depressed="displayStyle === 'hidden'"
-                :color="displayStyle === 'hidden' ? 'primary' : 'accent'"
-                @click="selectStyle('hidden')"
-            >
-                Hidden
-            </v-btn>
-            <v-btn icon color="accent" v-if="displayStyle === 'hidden'" @click="toggleTranslation">
-                <v-icon> mdi-google-translate </v-icon>
-            </v-btn>
-            <v-spacer></v-spacer>
-            <p class="caption mb-0 mr-4">Showing {{ words.length }} word{{ words.length > 0 ? 's' : '' }}</p>
-            <AddDialog v-if="logged" :list-id="this.$router.currentRoute.params.id" :reload-words="reloadWords" />
-        </div>
-        <div v-if="displayStyle === 'list'">
-            <EditDialog
-                :word-id="word.id"
-                :visible="word.id === editingId"
-                v-for="(word, i) in words"
-                :key="word.id"
-                :handle-cancel="cancelEdit"
-            >
+    <v-sheet class="pa-4" min-height="70vh" rounded="lg">
+        <div>
+            <div class="d-flex flex-row mb-4 align-end">
+                <v-btn
+                    class="mr-2"
+                    :depressed="displayStyle === 'list'"
+                    :color="displayStyle === 'list' ? 'primary' : 'accent'"
+                    @click="selectStyle('list')"
+                >
+                    List
+                </v-btn>
+                <v-btn
+                    class="mr-2"
+                    :depressed="displayStyle === 'hidden'"
+                    :color="displayStyle === 'hidden' ? 'primary' : 'accent'"
+                    @click="selectStyle('hidden')"
+                >
+                    Hidden
+                </v-btn>
+                <v-btn icon color="accent" v-if="displayStyle === 'hidden'" @click="toggleTranslation">
+                    <v-icon> mdi-google-translate </v-icon>
+                </v-btn>
+                <v-spacer></v-spacer>
+                <p class="caption mb-0 mr-4">Showing {{ words.length }} word{{ words.length > 0 ? 's' : '' }}</p>
+                <AddDialog v-if="logged" :list-id="this.$router.currentRoute.params.id" :reload-words="reloadWords" />
+            </div>
+            <div v-if="displayStyle === 'list'">
+                <EditDialog
+                    :word-id="word.id"
+                    :visible="word.id === editingId"
+                    v-for="(word, i) in words"
+                    :key="word.id"
+                    :handle-cancel="cancelEdit"
+                >
+                    <v-card
+                        elevation="2"
+                        :class="`${i + 1 !== words.length ? 'mb-4' : ''}`"
+                        :hover="logged"
+                        @click="logged ? (editingId = word.id) : false"
+                    >
+                        <v-card-text>
+                            <p class="text-h6">{{ word.czech }} - {{ word.russian }}</p>
+                            <p
+                                style="white-space: pre-wrap"
+                                class="body-2 mb-0"
+                                v-if="word.description"
+                                v-html="word.description"
+                            ></p>
+                        </v-card-text>
+                    </v-card>
+                </EditDialog>
+            </div>
+            <div v-if="displayStyle === 'hidden'">
                 <v-card
                     elevation="2"
+                    v-for="(word, i) in words"
+                    :key="word.id"
                     :class="`${i + 1 !== words.length ? 'mb-4' : ''}`"
-                    :hover="logged"
-                    @click="logged ? (editingId = word.id) : false"
+                    hover
+                    @click="unhideWord(word.id)"
                 >
                     <v-card-text>
-                        <p class="text-h6">{{ word.czech }} - {{ word.russian }}</p>
-                        <p
-                            style="white-space: pre-wrap"
-                            class="body-2 mb-0"
-                            v-if="word.description"
-                            v-html="word.description"
-                        ></p>
+                        <p class="text-h6" v-if="displayTranslation === 'czech'">
+                            {{ word.hidden ? word.czech : word.russian }}
+                        </p>
+                        <p class="text-h6" v-if="displayTranslation === 'russian'">
+                            {{ word.hidden ? word.russian : word.czech }}
+                        </p>
                     </v-card-text>
                 </v-card>
-            </EditDialog>
+            </div>
         </div>
-        <div v-if="displayStyle === 'hidden'">
-            <v-card
-                elevation="2"
-                v-for="(word, i) in words"
-                :key="word.id"
-                :class="`${i + 1 !== words.length ? 'mb-4' : ''}`"
-                hover
-                @click="unhideWord(word.id)"
-            >
-                <v-card-text>
-                    <p class="text-h6" v-if="displayTranslation === 'czech'">
-                        {{ word.hidden ? word.czech : word.russian }}
-                    </p>
-                    <p class="text-h6" v-if="displayTranslation === 'russian'">
-                        {{ word.hidden ? word.russian : word.czech }}
-                    </p>
-                </v-card-text>
-            </v-card>
-        </div>
-    </div>
+    </v-sheet>
 </template>
 
 <script lang="ts">

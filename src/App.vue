@@ -58,9 +58,7 @@
                     </v-col>
 
                     <v-col>
-                        <v-sheet class="pa-4" min-height="70vh" rounded="lg">
-                            <router-view />
-                        </v-sheet>
+                        <router-view />
                     </v-col>
                 </v-row>
             </v-container>
@@ -96,8 +94,6 @@ export default {
     }),
     async mounted() {
         await store.dispatch('setLogged');
-
-        console.log('asd');
 
         if (store.state.auth.logged && Object.keys(store.state.auth.userData).length === 0) {
             Api.getInstance()

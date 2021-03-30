@@ -1,32 +1,34 @@
 <template>
-    <div>
-        <v-card v-if="logged">
-            <v-card-text>
-                <p class="text-h6 black--text">Total lists count</p>
-                <p class="text-body-1">{{ lists.length }}</p>
-            </v-card-text>
-        </v-card>
-        <template v-else>
-            <v-card class="mb-6">
+    <v-sheet class="pa-4" min-height="70vh" rounded="lg">
+        <div>
+            <v-card v-if="logged">
                 <v-card-text>
-                    <p class="text-h6 black--text">Public lists count</p>
+                    <p class="text-h6 black--text">Total lists count</p>
                     <p class="text-body-1">{{ lists.length }}</p>
                 </v-card-text>
             </v-card>
-            <v-card>
-                <v-card-text>
-                    <p class="text-h6 black--text">Public lists</p>
-                    <v-list dense>
-                        <v-list-item v-for="list in lists" :key="list.id" link :to="`/list/${list.id}`">
-                            <v-list-item-title>
-                                {{ list.name }}
-                            </v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-                </v-card-text>
-            </v-card>
-        </template>
-    </div>
+            <template v-else>
+                <v-card class="mb-6">
+                    <v-card-text>
+                        <p class="text-h6 black--text">Public lists count</p>
+                        <p class="text-body-1">{{ lists.length }}</p>
+                    </v-card-text>
+                </v-card>
+                <v-card v-if="lists.length > 0">
+                    <v-card-text>
+                        <p class="text-h6 black--text">Public lists</p>
+                        <v-list dense>
+                            <v-list-item v-for="list in lists" :key="list.id" link :to="`/list/${list.id}`">
+                                <v-list-item-title>
+                                    {{ list.name }}
+                                </v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-card-text>
+                </v-card>
+            </template>
+        </div>
+    </v-sheet>
 </template>
 
 <script lang="ts">

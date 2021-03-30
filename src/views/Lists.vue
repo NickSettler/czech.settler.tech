@@ -1,36 +1,38 @@
 <template>
-    <div>
-        <div class="d-flex flex-row mb-4 align-baseline justify-start">
-            <AddListDialog v-if="logged" :success-handler="retrieveLists" class="mr-2" />
-            <v-row>
-                <v-col cols="4">
-                    <v-select
-                        v-model="sortOption"
-                        :items="sortOptionsArray"
-                        color="accent"
-                        :full-width="false"
-                        item-color="accent"
-                    ></v-select>
-                </v-col>
-            </v-row>
+    <v-sheet class="pa-4" min-height="70vh" rounded="lg">
+        <div>
+            <div class="d-flex flex-row mb-4 align-baseline justify-start">
+                <AddListDialog v-if="logged" :success-handler="retrieveLists" class="mr-2" />
+                <v-row>
+                    <v-col cols="4">
+                        <v-select
+                            v-model="sortOption"
+                            :items="sortOptionsArray"
+                            color="accent"
+                            :full-width="false"
+                            item-color="accent"
+                        ></v-select>
+                    </v-col>
+                </v-row>
+            </div>
+            <transition-group name="lists">
+                <v-card
+                    elevation="2"
+                    hover
+                    v-for="(list, i) in lists"
+                    :key="list.id"
+                    :class="`${i + 1 !== lists.length ? 'mb-4' : ''} list-card`"
+                    :to="`/list/${list.id}`"
+                >
+                    <v-app-bar flat color="rgba(0,0,0,0)">
+                        <v-toolbar-title> {{ list.name }} </v-toolbar-title>
+                        <v-spacer />
+                        <ListMenu :list="list" :success-handler="retrieveLists" />
+                    </v-app-bar>
+                </v-card>
+            </transition-group>
         </div>
-        <transition-group name="lists">
-            <v-card
-                elevation="2"
-                hover
-                v-for="(list, i) in lists"
-                :key="list.id"
-                :class="`${i + 1 !== lists.length ? 'mb-4' : ''} list-card`"
-                :to="`/list/${list.id}`"
-            >
-                <v-app-bar flat color="rgba(0,0,0,0)">
-                    <v-toolbar-title> {{ list.name }} </v-toolbar-title>
-                    <v-spacer />
-                    <ListMenu :list="list" :success-handler="retrieveLists" />
-                </v-app-bar>
-            </v-card>
-        </transition-group>
-    </div>
+    </v-sheet>
 </template>
 
 <script lang="ts">
