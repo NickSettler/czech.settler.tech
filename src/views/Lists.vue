@@ -36,10 +36,10 @@
 </template>
 
 <script lang="ts">
-import Api from '@/classes/api.ts';
 import AddListDialog from '@/components/AddListDialog.vue';
 import ListMenu from '@/components/ListMenu.vue';
 import store from '@/store/index';
+import ListsController from '@/classes/lists';
 
 type SortOption = {
     name: string;
@@ -77,6 +77,12 @@ export default {
             store.dispatch('setListSort', sort);
             this.sortLists(this.lists);
         },
+        logged(newState: boolean, oldState: boolean) {
+            if (newState !== oldState) {
+                this.lists = [];
+                this.retrieveLists();
+            }
+        },
     },
     computed: {
         logged(): boolean {
@@ -108,11 +114,9 @@ export default {
 
             if (this.logged) filterObject.user_created = '$CURRENT_USER';
 
-            return (
-                await Api.getInstance().items('lists').read({
-                    filter: filterObject,
-                })
-            ).data;
+            return await ListsController.getLists({
+                filter: filterObject,
+            });
         },
     },
 };

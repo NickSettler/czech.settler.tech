@@ -32,9 +32,9 @@
 </template>
 
 <script lang="ts">
-import Api from '@/classes/api.ts';
 import store from '@/store/index';
 import { VariableModel } from '@/classes/types/directus';
+import ListsController from '@/classes/lists';
 
 type HomeDataType = {
     lists: Array<VariableModel>;
@@ -76,11 +76,9 @@ export default {
 
             if (this.logged) filterObject.user_created = '$CURRENT_USER';
 
-            return (
-                await Api.getInstance().items('lists').read({
-                    filter: filterObject,
-                })
-            ).data;
+            return await ListsController.getLists({
+                filter: filterObject,
+            });
         },
     },
 };
