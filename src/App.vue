@@ -58,7 +58,9 @@
                     </v-col>
 
                     <v-col>
-                        <router-view />
+                        <transition name="fade" mode="out-in">
+                            <router-view />
+                        </transition>
                     </v-col>
                 </v-row>
             </v-container>
@@ -137,3 +139,17 @@ export default {
     },
 };
 </script>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition-property: visibility, opacity;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}
+.fade-enter,
+.fade-leave-active,
+.fade-leave-to {
+    opacity: 0;
+    visibility: collapse;
+}
+</style>
