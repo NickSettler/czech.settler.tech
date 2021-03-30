@@ -1,6 +1,6 @@
 import DirectusSDK from '@directus/sdk-js';
 import localforage from 'localforage';
-import { AuthOptions, ItemsHandler } from '@directus/sdk-js/dist/types/handlers';
+import { AuthOptions } from '@directus/sdk-js/dist/types/handlers';
 
 export default class Api extends DirectusSDK {
     private static API_URL = 'https://cms.settler.tech/';
