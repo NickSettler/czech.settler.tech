@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="d-flex flex-row mb-4">
+        <div class="d-flex flex-row mb-4 align-end">
             <v-btn
                 class="mr-2"
                 :depressed="displayStyle === 'list'"
@@ -21,6 +21,7 @@
                 <v-icon> mdi-google-translate </v-icon>
             </v-btn>
             <v-spacer></v-spacer>
+            <p class="caption mb-0 mr-4">Showing {{ words.length }} word{{ words.length > 0 ? 's' : '' }}</p>
             <AddDialog v-if="logged" :list-id="this.$router.currentRoute.params.id" :reload-words="reloadWords" />
         </div>
         <div v-if="displayStyle === 'list'">
