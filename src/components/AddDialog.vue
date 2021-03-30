@@ -2,14 +2,18 @@
     <div>
         <v-dialog v-model="shown" max-width="290" @click:outside="cancel">
             <template v-slot:activator="{ on, attrs }">
-                <v-btn color="accent" dark v-bind="attrs" v-on="on"> Add word </v-btn>
+                <v-btn color="accent" dark v-bind="attrs" v-on="on" fab small depressed>
+                    <v-icon> mdi-plus </v-icon>
+                </v-btn>
             </template>
             <v-form ref="form" lazy-validation v-if="logged" @submit.prevent>
                 <v-card>
                     <v-card-title class="headline"> Add new word? </v-card-title>
                     <v-card-text>
                         <v-text-field
-                            validate-on-blur="false"
+                            type="text"
+                            autocomplete="off"
+                            :validate-on-blur="false"
                             :rules="wordRules"
                             v-model="czech"
                             placeholder="Czech"
@@ -17,7 +21,9 @@
                             :loading="loading"
                         />
                         <v-text-field
-                            validate-on-blur="false"
+                            type="text"
+                            autocomplete="off"
+                            :validate-on-blur="false"
                             :rules="wordRules"
                             v-model="russian"
                             placeholder="Russian"

@@ -1,29 +1,47 @@
 <template>
     <v-sheet class="pa-4" min-height="70vh" rounded="lg">
         <div>
-            <div class="d-flex flex-row mb-4 align-end">
+            <div
+                :class="`d-flex flex-row ${
+                    $vuetify.breakpoint.xs || $vuetify.breakpoint.sm ? 'mb-2' : 'mb-6'
+                } align-end`"
+            >
                 <v-btn
                     class="mr-2"
-                    :depressed="displayStyle === 'list'"
-                    :color="displayStyle === 'list' ? 'primary' : 'accent'"
-                    @click="selectStyle('list')"
+                    @click="selectStyle(displayStyle === 'list' ? 'hidden' : 'list')"
+                    fab
+                    small
+                    depressed
+                    color="accent"
                 >
-                    List
+                    <v-icon>
+                        {{ displayStyle === 'list' ? 'mdi-eye' : 'mdi-eye-off' }}
+                    </v-icon>
                 </v-btn>
-                <v-btn
-                    class="mr-2"
-                    :depressed="displayStyle === 'hidden'"
-                    :color="displayStyle === 'hidden' ? 'primary' : 'accent'"
-                    @click="selectStyle('hidden')"
-                >
-                    Hidden
-                </v-btn>
-                <v-btn icon color="accent" v-if="displayStyle === 'hidden'" @click="toggleTranslation">
-                    <v-icon> mdi-google-translate </v-icon>
-                </v-btn>
+                <transition name="fade">
+                    <div v-if="displayStyle === 'hidden'">
+                        <v-btn icon color="accent" v-if="displayStyle === 'hidden'" @click="toggleTranslation">
+                            <v-icon> mdi-google-translate </v-icon>
+                        </v-btn>
+                        <v-btn icon color="accent" v-if="displayStyle === 'hidden'" @click="randomWordsSort">
+                            <v-icon> mdi-shuffle </v-icon>
+                        </v-btn>
+                    </div>
+                </transition>
                 <v-spacer></v-spacer>
+                <p class="caption mb-0 mr-4 d-none d-md-block">
+                    Showing {{ words.length }} word{{ words.length > 0 ? 's' : '' }}
+                </p>
+                <AddDialog
+                    v-if="logged"
+                    :list-id="this.$router.currentRoute.params.id"
+                    :reload-words="reloadWords"
+                    class="mr-1"
+                />
+            </div>
+            <div class="is-flex d-flex d-md-none mb-4">
+                <v-spacer />
                 <p class="caption mb-0 mr-4">Showing {{ words.length }} word{{ words.length > 0 ? 's' : '' }}</p>
-                <AddDialog v-if="logged" :list-id="this.$router.currentRoute.params.id" :reload-words="reloadWords" />
             </div>
             <div v-if="displayStyle === 'list'">
                 <EditDialog
@@ -86,6 +104,7 @@ type ListDataType = {
     searchQuery: string;
     displayStyle: string;
     displayTranslation: string;
+    needRandomSort: boolean;
     editingId: number;
 };
 
@@ -96,6 +115,14 @@ export default {
     metaInfo: {
         title: 'List',
     },
+    data: (): ListDataType => ({
+        words: [],
+        searchQuery: '',
+        displayStyle: 'list',
+        displayTranslation: 'czech',
+        needRandomSort: false,
+        editingId: -1,
+    }),
     async mounted() {
         this.reloadWords();
 
@@ -109,19 +136,14 @@ export default {
     },
     beforeMount() {
         if (localStorage.getItem(`list-${this.$router.currentRoute.params.id}-style`) !== null) {
-            this.displayStyle = localStorage.getItem(`list-${this.$router.currentRoute.params.id}-style`);
+            const displayStyle = localStorage.getItem(`list-${this.$router.currentRoute.params.id}-style`);
+            this.displayStyle = displayStyle;
+            if (displayStyle === 'hidden') this.needRandomSort = true;
         }
         if (localStorage.getItem(`list-${this.$router.currentRoute.params.id}-translation`) !== null) {
             this.displayTranslation = localStorage.getItem(`list-${this.$router.currentRoute.params.id}-translation`);
         }
     },
-    data: (): ListDataType => ({
-        words: [],
-        searchQuery: '',
-        displayStyle: 'list',
-        displayTranslation: 'czech',
-        editingId: -1,
-    }),
     computed: {
         logged() {
             return this.$store.state.auth.logged;
@@ -171,8 +193,17 @@ export default {
 
                     return aDate > bDate ? -1 : 1;
                 });
+
+            if (this.needRandomSort) {
+                this.randomWordsSort();
+                this.needRandomSort = false;
+            }
+        },
+        randomWordsSort() {
+            this.words = this.words.sort(() => Math.floor(Math.random() * (2 + 1)) - 1);
         },
         selectStyle(style: string) {
+            if (this.displayStyle !== style) this.menuVisible = false;
             this.displayStyle = style;
             localStorage.setItem(`list-${this.$router.currentRoute.params.id}-style`, style);
         },
@@ -200,4 +231,17 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition-property: visibility, opacity;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}
+.fade-enter,
+.fade-leave-active,
+.fade-leave-to {
+    opacity: 0;
+    visibility: collapse;
+}
+</style>
