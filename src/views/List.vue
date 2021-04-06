@@ -184,14 +184,6 @@ export default {
                     const bDate = new Date(b.date_created);
 
                     return aDate > bDate ? -1 : 1;
-                })
-                .sort((a: VariableModel, b: VariableModel) => {
-                    if (a.date_updated === null && b.date_updated === null) return 0;
-
-                    const aDate = new Date(a.date_updated);
-                    const bDate = new Date(b.date_updated);
-
-                    return aDate > bDate ? -1 : 1;
                 });
 
             if (this.needRandomSort) {
