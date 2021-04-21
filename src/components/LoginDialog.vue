@@ -19,7 +19,7 @@
                             v-model="email"
                             placeholder="Email"
                             @input="error = false"
-                            autocomplete="email"
+                            autocomplete="email username"
                             name="email"
                         />
                         <v-text-field
