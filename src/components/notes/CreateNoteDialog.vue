@@ -49,7 +49,7 @@ export default {
                 this.loading = true;
                 Api.getInstance()
                     .items(COLLECTIONS.NOTES)
-                    .create({
+                    .createOne({
                         name: this.name,
                     })
                     .then(() => {

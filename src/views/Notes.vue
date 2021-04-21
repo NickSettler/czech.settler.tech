@@ -39,7 +39,7 @@ export default Vue.extend({
             return (
                 await Api.getInstance()
                     .items('notes')
-                    .read({
+                    .readMany({
                         filter: {
                             status: 'published',
                         },
@@ -49,16 +49,7 @@ export default Vue.extend({
         async processNotes(notes: VariableModel[]) {
             return await Promise.all(
                 notes.map(async (note) => {
-                    const userCreated = (
-                        await Api.getInstance().users.read({
-                            filter: {
-                                id: {
-                                    _eq: note.user_created,
-                                },
-                            },
-                            single: true,
-                        })
-                    ).data;
+                    const userCreated = await Api.getInstance().users.readOne(note.user_created as string);
 
                     return {
                         ...note,

@@ -30,6 +30,10 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: npm install
+      - name: Create .env file
+        run: |
+          touch .env
+          echo VUE_APP_SENTRY_DSN=${{ secrets.SENTRY_DSN }} >> .env
       - name: Run build task
         run: npm run build
       - name: Copy via SSH

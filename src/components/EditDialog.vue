@@ -38,6 +38,7 @@
 
 <script lang="js">
 import Api from "@/classes/api.ts";
+import * as Sentry from "@sentry/vue";
 
 export default {
     name: "EditDialog",
@@ -76,36 +77,35 @@ export default {
     },
     methods: {
         getWordDetails() {
-            Api.getInstance().items('words').read({
-                filter: {
-                    id: `${this.$props.wordId}`
-                },
-                single: true
-            })
-                .then(data => {
+            Api.getInstance().items('words').readOne(this.$props.wordId)
+                .then(word => {
                     this.loading = false;
-                    this.word = data.data;
-                    this.description = data.data.description;
-                    this.czech = data.data.czech;
-                    this.russian = data.data.russian;
+                    this.word = word;
+                    this.description = word.description;
+                    this.czech = word.czech;
+                    this.russian = word.russian;
                 });
         },
         deleteWord() {
-            Api.getInstance().items('words').delete(this.$props.wordId)
-                .then(() => {
+            Api.getInstance().items('words').updateOne(this.$props.wordId, {
+                    status: 'archived',
+                }).then(() => {
                     this.shown = false;
                     this.cancelDialog();
+                }).catch((error) => {
+                    Sentry.captureException(error);
+                    this.error = true;
                 })
         },
         updateWord() {
-            Api.getInstance().items('words').update(this.$props.wordId, {
+            Api.getInstance().items('words').updateOne(this.$props.wordId, {
                 czech: this.czech,
                 russian: this.russian,
                 description: this.description,
             }).then(() => {
                 this.cancelDialog();
             }).catch(error => {
-                console.log(JSON.parse(JSON.stringify(error)));
+                Sentry.captureException(error);
             })
         },
         cancelDialog() {

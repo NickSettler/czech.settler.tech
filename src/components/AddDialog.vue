@@ -58,6 +58,7 @@
 
 <script lang="js">
 import Api from "@/classes/api.ts";
+import * as Sentry from '@sentry/vue';
 
 export default {
     name: "AddDialog",
@@ -81,7 +82,7 @@ export default {
             if (this.$refs.form.validate()) {
                 Api.getInstance()
                     .items("words")
-                    .create({
+                    .createOne({
                         description: this.description,
                         czech: this.czech,
                         russian: this.russian
@@ -89,15 +90,16 @@ export default {
                     .then(wordData => {
                         return Api.getInstance()
                             .items("lists_words_2")
-                            .create({
+                            .createOne({
                                 lists_id: this.$props.listId,
-                                words_id: wordData.data.id
+                                words_id: wordData.id
                             });
                     })
                     .then(() => {
                         this.cancel();
                     })
-                    .catch(() => {
+                    .catch((error) => {
+                        Sentry.captureException(error);
                         this.loading = false;
                         this.error = true;
                     });

@@ -85,6 +85,8 @@ import LoginDialog from '@/components/LoginDialog.vue';
 import store from '@/store/index';
 import Api from '@/classes/api';
 import SignUpDialog from '@/components/global/SignUpDialog.vue';
+import AuthController from '@/classes/auth';
+import UserController from '@/classes/user';
 
 export default {
     name: 'App',
@@ -95,34 +97,32 @@ export default {
         signUpDialogVisible: false,
     }),
     async mounted() {
-        await store.dispatch('setLogged');
+        await this.initAuthStore();
 
-        if (store.state.auth.logged && Object.keys(store.state.auth.userData).length === 0) {
-            Api.getInstance()
-                .users.me.read()
-                .then((data) => store.dispatch('setUserData', data.data))
-                .then(() => {
-                    return Api.getInstance().roles.read({
-                        filter: {
-                            id: store.state.auth.userData.role,
-                        },
-                        single: true,
-                    });
-                })
-                .then((role) => {
-                    return store.dispatch('setUserData', {
-                        ...store.state.auth.userData,
-                        admin_access: role.data!.admin_access,
-                    });
-                });
+        await Api.getInstance()
+            .auth.refresh()
+            .catch(async () => {
+                await AuthController.clearTokenData();
+                await this.initAuthStore();
+            });
+
+        if (this.logged && this.userData && Object.keys(store.state.auth.userData).length === 0) {
+            await UserController.storeUserData({
+                adminAccessNeeded: true,
+            });
         }
     },
     computed: {
+        logged: () => store.state.auth.logged,
+        userData: () => store.state.auth.userData,
         isAdmin() {
             return this.$store.state.auth.logged && this.$store.state.auth.userData?.admin_access;
         },
     },
     methods: {
+        async initAuthStore() {
+            await store.dispatch('setLogged');
+        },
         openLoginDialog() {
             this.loginDialogVisible = true;
         },

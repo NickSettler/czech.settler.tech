@@ -51,7 +51,7 @@ export default {
             this.loading = true;
             Api.getInstance()
                 .items('lists')
-                .create({
+                .createOne({
                     name: this.name,
                 })
                 .then(() => this.$props.successHandler())

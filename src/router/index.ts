@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import Api from '@/classes/api';
 import store from '@/store';
-import localforage from 'localforage';
+import { AUTH_TOKEN_KEYS } from '@/classes/auth';
 
 Vue.use(VueRouter);
 
@@ -45,7 +45,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-    if (Api.getInstance().auth.token === null && (await localforage.getItem('directus_access_token')) !== null) {
+    if (Api.getInstance().auth.token === null && localStorage.getItem(AUTH_TOKEN_KEYS.TOKEN) !== null) {
         store.dispatch('setLogged').then(next);
     } else {
         next();

@@ -1,28 +1,26 @@
-import DirectusSDK from '@directus/sdk-js';
-import localforage from 'localforage';
-import { AuthOptions } from '@directus/sdk-js/dist/types/handlers';
+import { Directus, Auth, AxiosTransport, DirectusOptions, LocalStorage } from '@directus/sdk';
 
-export default class Api extends DirectusSDK {
+export default class Api extends Directus<DirectusOptions> {
     private static API_URL = 'https://cms.settler.tech/';
     private static instance: Api;
 
-    private constructor(
-        url: string,
-        options?: {
-            auth: Partial<AuthOptions>;
-        },
-    ) {
+    private constructor(url: string, options?: DirectusOptions) {
         super(url, options);
     }
 
     public static getInstance(): Api {
         if (!Api.instance) {
+            const storage = new LocalStorage();
+            const transport = new AxiosTransport(Api.API_URL, storage);
+
+            const auth: Auth = new Auth(transport, storage, {
+                mode: 'json',
+            });
+
             Api.instance = new Api(Api.API_URL, {
-                auth: {
-                    storage: localforage,
-                    mode: 'json',
-                    autoRefresh: true,
-                },
+                auth,
+                storage,
+                transport,
             });
         }
 

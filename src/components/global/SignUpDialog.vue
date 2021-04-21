@@ -44,7 +44,7 @@
 <script lang="ts">
 import Api from '@/classes/api';
 import store from '@/store';
-import localforage from 'localforage';
+import { AUTH_TOKEN_KEYS } from '@/classes/auth';
 
 const EMAIL_REGEXP = /^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/gm;
 export default {
@@ -71,7 +71,7 @@ export default {
         },
     },
     async updated() {
-        if (store.state.auth.logged !== ((await localforage.getItem('directus_access_token')) !== null))
+        if (store.state.auth.logged !== (localStorage.getItem(AUTH_TOKEN_KEYS.TOKEN) !== null))
             await store.dispatch('setLogged');
         if (this.logged && Object.keys(this.userData).length === 0)
             await store.dispatch('setUserData', (await Api.getInstance().users.me.read()).data);
@@ -100,7 +100,7 @@ export default {
             this.error = false;
             if (this.$refs.form.validate()) {
                 Api.getInstance()
-                    .users.create({
+                    .users.createOne({
                         email: this.email,
                         password: this.password,
                     })

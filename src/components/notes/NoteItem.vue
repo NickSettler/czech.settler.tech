@@ -56,7 +56,7 @@ export default {
             this.menuVisible = false;
         },
         async deleteNote(note: VariableModel) {
-            return await Api.getInstance().items(COLLECTIONS.NOTES).delete(note.id).then(this.reloadHandler);
+            return await Api.getInstance().items(COLLECTIONS.NOTES).deleteOne(note.id).then(this.reloadHandler);
         },
     },
 };
