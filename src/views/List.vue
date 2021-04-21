@@ -155,7 +155,7 @@ export default {
             const wordsIds = (
                 await Api.getInstance()
                     .items('lists_words_2')
-                    .read({
+                    .readMany({
                         filter: {
                             lists_id: listId,
                         },
@@ -163,17 +163,23 @@ export default {
                     })
             ).data.map((relation: VariableModel) => relation.words_id);
 
-            this.words = (
-                await Api.getInstance()
-                    .items('words')
-                    .read({
-                        filter: {
-                            id: {
-                                _in: wordsIds,
-                            },
-                        },
-                    })
-            ).data
+            this.words = (wordsIds.length > 0
+                ? (
+                      await Api.getInstance()
+                          .items('words')
+                          .readMany({
+                              filter: {
+                                  id: {
+                                      _in: wordsIds,
+                                  },
+                                  status: {
+                                      _eq: 'published',
+                                  },
+                              },
+                          })
+                  ).data
+                : []
+            )
                 .map((word: VariableModel) => {
                     word['hidden'] = true;
 

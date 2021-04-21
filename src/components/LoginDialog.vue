@@ -42,7 +42,7 @@
                 </v-card>
             </v-form>
             <v-card v-else>
-                <v-card-title class="headline"> Logged {{ userData.first_name }} </v-card-title>
+                <v-card-title class="headline"> Logged {{ userData && userData.first_name }} </v-card-title>
                 <v-card-actions>
                     <v-btn color="green darken-1" text @click="logout"> Logout </v-btn>
                 </v-card-actions>
@@ -55,9 +55,10 @@
 import Api from '@/classes/api.ts';
 import Vue from 'vue';
 import { VForm } from '@/classes/types/vuetify';
-import { LoginCredentials } from '@directus/sdk-js/dist/types/handlers';
 import store from '@/store/index';
-import localforage from 'localforage';
+import { AUTH_TOKEN_KEYS } from '@/classes/auth';
+import { AuthCredentials } from '@directus/sdk';
+import * as Sentry from '@sentry/vue';
 
 export default Vue.extend({
     name: 'LoginDialog',
@@ -87,9 +88,9 @@ export default Vue.extend({
         },
     },
     async updated() {
-        if (store.state.auth.logged !== ((await localforage.getItem('directus_access_token')) !== null))
+        if (store.state.auth.logged !== (localStorage.getItem(AUTH_TOKEN_KEYS.TOKEN) !== null))
             await store.dispatch('setLogged');
-        if (this.logged && Object.keys(this.userData).length === 0)
+        if (this.logged && this.userData && Object.keys(this.userData).length === 0)
             await store.dispatch('setUserData', (await Api.getInstance().users.me.read()).data);
     },
     methods: {
@@ -97,7 +98,7 @@ export default Vue.extend({
             e.preventDefault();
 
             if ((this.$refs.loginForm as VForm).validate()) {
-                const credentials: LoginCredentials = {
+                const credentials: AuthCredentials = {
                     email: this.email,
                     password: this.password,
                 };
@@ -120,7 +121,11 @@ export default Vue.extend({
                             return Promise.resolve();
                         }
                     })
-                    .catch(() => {
+                    .then(() => {
+                        Api.getInstance().auth.refresh();
+                    })
+                    .catch((error) => {
+                        Sentry.captureException(error);
                         this.error = true;
                     });
             }

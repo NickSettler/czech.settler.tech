@@ -42,6 +42,9 @@ export default Vue.extend({
                     .readMany({
                         filter: {
                             status: 'published',
+                            user_created: {
+                                _eq: '$CURRENT_USER',
+                            },
                         },
                     })
             ).data;
