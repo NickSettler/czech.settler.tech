@@ -2,7 +2,7 @@
     <v-sheet class="pa-4" min-height="70vh" rounded="lg">
         <div>
             <div class="d-flex flex-row mb-4 align-baseline justify-start">
-                <AddListDialog v-if="logged" :success-handler="retrieveLists" class="mr-2" />
+                <AddListDialog v-if="logged" :success-handler="createListSuccessHandler" class="mr-2" />
                 <v-row>
                     <v-col cols="4">
                         <v-select
@@ -96,6 +96,10 @@ export default {
         },
     },
     methods: {
+        async createListSuccessHandler() {
+            await this.retrieveLists();
+            this.$gtag.event('create_list');
+        },
         async retrieveLists() {
             this.lists = await this.getLists().then(this.sortLists);
         },
