@@ -9,7 +9,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@directus/sdk": "^9.0.0-rc.62",
+    "@directus/sdk": "^9.0.0-rc.64",
     "@sentry/tracing": "^6.3.0",
     "@sentry/vue": "^6.3.0",
     "@types/lodash": "^4.14.168",
