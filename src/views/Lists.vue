@@ -1,10 +1,12 @@
 <template>
     <v-sheet class="pa-4" min-height="70vh" rounded="lg">
         <div>
-            <div class="d-flex flex-row mb-4 align-baseline justify-start">
-                <AddListDialog v-if="logged" :success-handler="createListSuccessHandler" class="mr-2" />
-                <v-row>
-                    <v-col cols="4">
+            <div class="d-flex flex-row flex-wrap mb-4 align-stretch justify-start flex-sm-column flex-md-row">
+                <v-row class="flex-grow-1">
+                    <v-col class="col-auto d-flex align-center">
+                        <AddListDialog v-if="logged" :success-handler="createListSuccessHandler" />
+                    </v-col>
+                    <v-col cols="12" sm="12" md="4">
                         <v-select
                             v-model="sortOption"
                             :items="sortOptionsArray"
@@ -13,15 +15,18 @@
                             item-color="accent"
                         ></v-select>
                     </v-col>
+                    <v-col cols="12" sm="12" md="4">
+                        <v-text-field v-model="searchQuery" label="Search" color="accent" :full-width="false" />
+                    </v-col>
                 </v-row>
             </div>
             <transition-group name="lists">
                 <v-card
                     elevation="2"
                     hover
-                    v-for="(list, i) in lists"
+                    v-for="(list, i) in filteredLists"
                     :key="list.id"
-                    :class="`${i + 1 !== lists.length ? 'mb-4' : ''} list-card`"
+                    :class="`${i + 1 !== filteredLists.length ? 'mb-4' : ''} list-card`"
                     :to="`/list/${list.id}`"
                 >
                     <v-app-bar flat color="rgba(0,0,0,0)">
@@ -50,6 +55,7 @@ type ListsDataType = {
     lists: [];
     sortOption: string;
     sortOptions: SortOption[];
+    searchQuery: string;
 };
 
 export default {
@@ -71,6 +77,7 @@ export default {
             { name: 'Date Created', field: 'date_created' },
             { name: 'Date Updated', field: 'date_updated' },
         ],
+        searchQuery: '',
     }),
     watch: {
         sortOption(sort: string) {
@@ -87,6 +94,11 @@ export default {
     computed: {
         logged(): boolean {
             return this.$store.state.auth.logged;
+        },
+        filteredLists(): any[] {
+            return this.lists.filter((list: any) => {
+                return list.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+            });
         },
         sortOptionsArray(): Array<SortOption> {
             return this.sortOptions.map((option: SortOption) => option.name, []);
